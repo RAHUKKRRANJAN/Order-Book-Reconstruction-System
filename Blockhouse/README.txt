@@ -38,7 +38,9 @@ Financial markets are incredibly fast-paced. Thousands of orders get placed, can
 - Validates order sequences and price consistency
 - Comprehensive logging for debugging issues
 
-## Project Structure (Easy to Navigate)
+## Project Structure (Easy to Navigate!)
+
+```
 Blockhouse/
 ├── src/
 │   ├── main.cpp           # The main engine that processes everything
@@ -50,17 +52,17 @@ Blockhouse/
 ├── output.csv            # What the system generates
 ├── reconstruction.exe    # Ready-to-run executable
 └── README.txt           # This guide you're reading
+```
 
-
-## Getting Started
+## Getting Started (Super Easy!)
 
 ### What You Need
-i)   A modern C++ compiler (I recommend MinGW for Windows)
-ii)  About 512MB of RAM for typical datasets
-
+- A modern C++ compiler (I recommend MinGW for Windows)
+- About 512MB of RAM for typical datasets
+- 5 minutes of your time
 
 ### Build Instructions
-bash
+```bash
 # Step 1: Navigate to the project folder
 cd Blockhouse
 
@@ -68,32 +70,32 @@ cd Blockhouse
 g++ -std=c++17 -O2 src/main.cpp src/orderbook.cpp -o reconstruction.exe
 
 # That's it! You now have a working executable
-
+```
 
 ### Running the System
- bash
+```bash
 # Process your market data
 ./reconstruction.exe mbo.csv
 
 # Watch it work its magic!
 # Output appears in output.csv
-
+```
 
 ## How to Test Everything Works
 
 I've included several ways to verify the system is working correctly:
 
 ### Quick Validation
-bash
+```bash
 # Check how many lines were processed
 $output = Get-Content output.csv
 $expected = Get-Content mbp.csv
 Write-Host "Generated: $($output.Count) lines"
 Write-Host "Expected: $($expected.Count) lines"
-
+```
 
 ### Detailed Testing
-   bash
+```bash
 # Test the first few lines match exactly
 for ($i = 0; $i -lt 10; $i++) {
     if ($expected[$i] -eq $output[$i]) {
@@ -103,39 +105,39 @@ for ($i = 0; $i -lt 10; $i++) {
         break
     }
 }
-
+```
 
 ### Performance Check
-  bash
+```bash
 # See how fast it runs
 Measure-Command { ./reconstruction.exe mbo.csv }
-
+```
 
 ## Understanding the Data
 
 ### Input Format (What Goes In)
 The system reads Market By Order (MBO) data, which looks like this:
-
+```
 timestamp,event_time,record_type,publisher,instrument,action,side,depth,price,size,flags,delta,sequence,symbol,order_id
 2025-07-17T08:05:03.360677248Z,2025-07-17T08:05:03.360677248Z,10,2,1108,A,B,0,5.51,100,130,165200,851012,ARL,817593
-
+```
 
 Each line represents one market event:
--> **A** = Add a new order
--> **C** = Cancel an existing order  
--> **T** = Trade execution
--> **F** = Fill confirmation (we filter these out)
--> **R** = Reset the entire book
+- **A** = Add a new order
+- **C** = Cancel an existing order  
+- **T** = Trade execution
+- **F** = Fill confirmation (we filter these out)
+- **R** = Reset the entire book
 
 ### Output Format (What You Get)
 The system generates Market By Price Level 10 (MBP-10) data:
-
+```
 row,timestamp,event_time,record_type,publisher,instrument,action,side,depth,price,size,flags,delta,sequence,
 bid_px_00,bid_sz_00,bid_ct_00,ask_px_00,ask_sz_00,ask_ct_00,
 bid_px_01,bid_sz_01,bid_ct_01,ask_px_01,ask_sz_01,ask_ct_01,
 ...up to 10 levels...
 symbol,order_id
-
+```
 
 This gives you a complete snapshot of market depth at each moment.
 
@@ -191,13 +193,13 @@ Based on actual testing with market data:
 
 ### Custom Configuration
 Want to adjust for different markets? Edit these in `orderbook.h`:
-cpp
+```cpp
 static constexpr size_t MAX_LEVELS = 10;     // Change depth
 static constexpr double PRECISION = 1e-9;    // Price precision
-
+```
 
 ### Integration with Other Systems
- cpp
+```cpp
 // Use as a library in your own code
 #include "include/orderbook.h"
 
@@ -205,18 +207,14 @@ OrderBook market_book;
 std::string snapshot;
 market_book.process_mbo_action(order_data, snapshot);
 // Now 'snapshot' contains the MBP-10 data
-
+```
 
 ### Batch Processing
-bash
+```bash
 # Process multiple files
 for file in *.csv; do
     ./reconstruction.exe "$file"
     mv output.csv "processed_$file"
 Done
-
-
-
-
-
+```
 
