@@ -213,7 +213,7 @@ bash
 for file in *.csv; do
     ./reconstruction.exe "$file"
     mv output.csv "processed_$file"
-done
+Done
 
 
 
